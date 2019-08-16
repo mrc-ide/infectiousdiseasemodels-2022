@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>index.utf8.md</title>
+
+<script src="libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+<link href="libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+
+</div>
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This interface is built using an R package called <code>shiny</code> using the R programming language. Over the 2-week short course you will be using this interface to explore and understand the basics of infectious disease modelling.</p>
+<p>Built into the interface is an R package called <a href="https://mrc-ide.github.io/odin/"><code>odin</code></a> which implements a high-level language for describing and implementing ordinary differential equations in R. The actual solution of the differential equations is done with the <code>deSolve</code> package.</p>
+</div>
+<div id="writing-your-own-models-in-the-interface" class="section level2">
+<h2>Writing your own models in the interface</h2>
+<div id="the-code-editor" class="section level3">
+<h3>The code editor</h3>
+<p>You can type your model (equations, parameters, intitial values) directly into the code editor which looks something like this: <img src="img/code_editor_snippet.png" alt="code_editor" /></p>
+<p>To specify an object use <code>&lt;-</code> or <code>=</code>. You can also add comments and notes to your code by using the <code>#</code> symbol. Standard mathematical operators e.g. <code>*</code>, <code>/</code>, <code>+</code>, <code>-</code> etc are all supported. For example:</p>
+<pre><code>x &lt;- 3 * 5 # this is a comment after the &quot;#&quot;</code></pre>
+</div>
+<div id="differential-equations" class="section level3">
+<h3>Differential equations</h3>
+<p>Remember from day 1 where you wrote out your own differential equations from the flowcharts? They looked something like this for a basic SIR model:</p>
+<p><span class="math display">\[ \frac{dS}{dt} = -\frac{\beta\ SI}{N} \]</span> <span class="math display">\[ \frac{dI}{dt} = \frac{\beta\ SI}{N} -\sigma I \]</span> <span class="math display">\[ \frac{dR}{dt} = \sigma I \]</span></p>
+<p>These differential equations in the odin language are then specified as follows:</p>
+<pre><code>  deriv(S) &lt;-  - beta * S * I / N
+  deriv(I) &lt;- beta * S * I / N - sigma * I
+  deriv(R) &lt;- sigma * I
+</code></pre>
+<p>So each variable is specified by <code>deriv(variable)</code>. This specifies that <code>variable</code> is a variable that will change over time.</p>
+</div>
+<div id="intital-conditions" class="section level3">
+<h3>Intital conditions</h3>
+<p>Every variable (<code>deriv(variable)</code>) then needs an initial condition. These are specified using <code>initial(variable)</code>.</p>
+<p>So for the example equations above, you might specify intital values as:</p>
+<pre><code>  initial(S) &lt;- N - I0
+  initial(I) &lt;- I0
+  initial(R) &lt;- 0</code></pre>
+</div>
+<div id="parameter-values" class="section level3">
+<h3>Parameter values</h3>
+<p>Each parameter then also needs a value. These are specified using <code>parameter_name &lt;- user(parameter_value)</code></p>
+<pre><code>  N &lt;- user(1e6)
+  I0 &lt;- user(1)
+  beta &lt;- user(4)
+  sigma &lt;- user(2)</code></pre>
+<p>Note here that <code>odin</code> does not allow functions within user defined variables. For example:</p>
+<pre><code>  sigma &lt;- user(10)   # this is fine
+  sigma &lt;- user(20/2) # it does not like this</code></pre>
+</div>
+<div id="compiling-and-running-your-model" class="section level3">
+<h3>Compiling and running your model</h3>
+<p>Once you are happy with your model coded in the editor, you can “run”/“compile” the model (depending on your practical session). Any errors in your odin code should throw a relevant error message just below code editor if you have <code>auto validate</code> checked.</p>
+<p><img src="img/ebola_example.png" /></p>
+<p>At any point you can save your model file by clicking on the blue <code>Save</code> button underneath the code editor. You can also upload your model file via <code>Browse</code> just above the code editor.</p>
+<p>The can then move on to the next part which might be for example: exploring the model outputs, loading data, linking the data and model. You can flip back and forth between any of the tabs at the top of the page.</p>
+<p>As each tab is filled correctly, the icons shown at the top of the page will turn from red (not yet filled) to green (ready to run).</p>
+<p><img src="img/icons_example_2.jpg" /></p>
+<p>The icons will generally correspond to (with slight differences by practical):</p>
+<ol style="list-style-type: decimal">
+<li>data</li>
+<li>model code</li>
+<li>visualising the model output</li>
+<li>sensitivity analysis</li>
+<li>linking the model and the data</li>
+<li>fitting the model to the data</li>
+</ol>
+<p>These will correspond to the icons on the tabs. You may have additional tabs e.g. <code>Visualise</code> and <code>Sensitivity</code>. Or you may have fewer tabs depending on the practical.</p>
+<p>N.B that not all practicals will use or need all of these features.</p>
+</div>
+<div id="exploring-the-model" class="section level3">
+<h3>Exploring the model</h3>
+<p>N.B: not all of the features below will be needed/available for every practical session.</p>
+<p>In the <code>Visualise</code> tab, you can explore the model output: <img src="img/model_run_snippet1.png" alt="model run snippet" /></p>
+<ol style="list-style-type: decimal">
+<li><p>Note that you must input an <code>End time</code> and click <code>Run model</code> to visualise your model output.</p></li>
+<li><p>You can use the <code>Model parameters</code> section on the left to change your parameter values and see how this affects your model output.</p></li>
+<li><p>You can choose what is shown on the plot by clicking and unclicking the variables on the righthand-side of the plot. E.g. click “S” to grey out the variable so that the susceptibles are not shown on the plot.</p></li>
+<li><p>You can also click on “graph settings” underneath the plot to choose which variables are plotted on the secondary axis, and whether to plot the output on the log scale. <img src="img/graph_settings.png" alt="graph settings" /></p></li>
+<li><p>You can hover over the graph to get more information about a particular point/variable.</p></li>
+<li><p>You can zoom in/out by double clicking on the graph, or by using the icons at the top right of the plot.</p></li>
+<li><p>You can choose to download a <code>.csv</code> of your model output or parameter values.</p></li>
+<li><p>Clicking on <code>Model code</code> underneath the plot will show you your model code in the same tab.</p></li>
+</ol>
+</div>
+<div id="optional-information-of-interest-not-needed-for-the-practicals" class="section level3">
+<h3>Optional information of interest (not needed for the practicals)</h3>
+<div id="odin-vs-r" class="section level4">
+<h4>Odin vs R</h4>
+<p>An open SIR model (with births and deaths) might look like this in pure R:</p>
+<pre><code>pars &lt;- list(N = 1e7,
+             b = 1 /75,
+             I0 = 1,
+             beta = 24
+             sigma = 12
+             delta = 1 / 5)
+
+initial &lt;- function(t = 0, pars) {
+  I0 &lt;- pars$I0
+  c(N - I0, I0, 0.0)
+}
+
+derivs &lt;- function(t, y, pars) {
+  S &lt;- y[[1L]]
+  I &lt;- y[[2L]]
+  R &lt;- y[[3L]]
+  b &lt;- pars$b
+  N &lt;- pars$N
+  beta &lt;- pars$beta
+  sigma &lt;- pars$sigma
+  delta &lt;- pars$delta
+
+  Births &lt;- N / 75
+
+  list(c(Births - b * S - beta * S * I / N + delta * R,
+         beta * S * I / N - (b + sigma) * I,
+         sigma * I - b * R-delta * R))
+}
+
+t &lt;- seq(0, 100, by = 0.01)
+deSolve::ode(initial(), t, derivs, pars)</code></pre>
+<p>The same code in odin will look very similar, but simpler and hopefully more intuitive:</p>
+<pre><code>deriv(S) &lt;- Births - b * S - beta * S * I / N + delta * R
+deriv(I) &lt;- beta * S * I / N - (b + sigma) * I
+deriv(R) &lt;- sigma * I - b * R - delta * R
+
+initial(S) &lt;- N - I0
+initial(I) &lt;- I0
+initial(R) &lt;- 0
+
+Births &lt;- N / 75
+b &lt;- 1 / 75
+N &lt;- 1e7
+I0 &lt;- user(1)
+beta &lt;- user(24)
+sigma &lt;- 12
+delta &lt;- 1 / 5</code></pre>
+<p>Both examples above use the package <code>deSolve</code> for the numerical integration of ODEs.</p>
+</div>
+<div id="numerical-integration" class="section level4">
+<h4>Numerical integration</h4>
+<p>Numerical integration is used to evaluate a definite integral when: there is no analytical solution, calculating the closed form of the integral is inefficient, or when the explicit function is not known. Numerical integration consists of methods to find the approximate area under the graph of the function f(x) between two x-values.</p>
+<p>Although (simple) numerical integration can be done by hand, this quickly becomes unrealistic for complex functions. Various R packages are available that allow us to numerically solve differential equations.</p>
+<p>During the short course, we will be using the R package <code>odin</code> which implements a high-level language for describing and implementing ordinary differential equations in R. The actual solution of the differential equations is done with the <code>deSolve</code> package.</p>
+</div>
+<div id="more-information-on-odin" class="section level4">
+<h4>More information on odin</h4>
+<p>Is available <a href="https://mrc-ide.github.io/odin/">here</a>, especially the <a href="https://mrc-ide.github.io/odin/articles/odin.html">getting started guide</a>.</p>
+</div>
+<div id="a-note-on-model-fitting" class="section level4">
+<h4>A note on model fitting</h4>
+<p>For the purposes of this short course, the model fitting methods used are very simple “least squares” fitting. This method is useful as it is very quick to implement, but there are more sophisticated model fitting methods are generally used such as likelihood-based approaches. The literature and field of study is vast, but some useful starting references are:</p>
+<ul>
+<li>Mutapi F. &amp; Roddam A. P values for pathogens: statistical inference from infectious-disease data. Lancet Infectious Diseases 2, 219-230 (2002).</li>
+<li>Williams B. G. &amp; Dye C. Maximum likelihood for parasitologists. Parasitology Today 10, 489-493 (1994).</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

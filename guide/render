@@ -1,0 +1,28 @@
+#!/usr/bin/env Rscript
+format <- rmarkdown::html_document(
+  self_contained = FALSE,
+  lib_dir = "libs")
+rmarkdown::render("index.md", format)
+
+
+find_scripts <- function(path) {
+  txt <- readLines(path)
+  txt <- txt[grepl('(href|src)="libs/', txt)]
+  sub('.*(href|src)="(libs/[^"]+)".*', "\\2", txt)
+}
+
+used <- find_scripts("index.html")
+found <- dir("libs", recursive = TRUE, full.names = TRUE)
+unlink(setdiff(found, used))
+
+drop_empty_dirs <- function(dirs) {
+  n <- vapply(dirs, function(x)
+    length(dir(x, all.files = TRUE, no.. = TRUE)), integer(1))
+  i <- n == 0
+  if (any(i)) {
+    file.remove(dirs[i])
+    drop_empty_dirs(dirs[!i])
+  }
+}
+
+drop_empty_dirs(list.dirs("libs"))
