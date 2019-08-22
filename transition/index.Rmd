@@ -1,5 +1,5 @@
 ---
-title: 'R documentation: transitioning from odin interface to R'
+title: 'R documentation: transitioning from the odin interface to R'
 author: 'Prepared for the course: Introduction to Mathematical Models of the Epidemiology
   & Control of Infectious Diseases'
 date: "September 2019"
@@ -11,7 +11,7 @@ header-includes: \usepackage{xcolor}
 
 ## Introduction
 
-Writing and solving mathematical models using the `odin` interface is an important part of the short-course. As a tool, it has been designed to facilitate the learning process of coding and solving models whilst offering neat visualisation of results. Delegates might be interested in transferring their newly developed skills to their own research. We think that the natural progression from the interface environment is to R and Rstudio. However, coding in the short-course interface and coding in R, although similar, might not be the same experience. For this, we have prepared a document to make this transition as friendly and intuitive as possible.
+Writing and solving mathematical models using the `odin` interface is an important part of the short course. As a tool, it has been designed to facilitate the learning process of coding and solving models whilst offering neat visualisation of results. Delegates might be interested in transferring their newly developed skills to their own research. We think that the natural progression from the interface environment is to R and Rstudio. However, coding in the short course interface and coding in R, although similar, might not be the same experience. For this, we have prepared a document to make this transition as friendly and intuitive as possible.
 
 Mastering R and programming are long processes. Here, we do not intend to cover all the basics and details of programming in R, but to offer some initial guidance on how to get started. As such, in this document we first provide several useful resources to start using R and Rstudio, (from installation to basic usage), followed by a comparative example between the `odin` interface and R.
 
@@ -33,21 +33,21 @@ For the rest of this documentation, it is useful to finalise installation and se
 - *[Coursera's Data Scientist's Toolbox](https://www.coursera.org/learn/data-scientists-tools)*: Coursera centralise free online courses created by leading universities. The "Data Scientist's Toolbox" covers statistics in R from installation to actual data analysis.
 
 
-- *[Introduction to R for IDM](https://mrc-ide.github.io/R-for-IDM-Intro/)*: This documentation is part of Imperial College's online materials, spcifcally directed to infectious diseaase modelling.
+- *[Introduction to R for IDM](https://mrc-ide.github.io/R-for-IDM-Intro/)*: This documentation is part of Imperial College London's online materials, specifcally for infectious disease modelling.
 
 
 ### Odin documentation
 
-The package `odin` was created for R and is the base on which the short-course modelling interface operates. This means that it is possible to replicate any work done on the interface, using R, Rstudio and the package `odin` for R.
+The package `odin` was created for R and is the base on which the short course modelling interface operates. This means that it is possible to replicate any work done on the interface, using R, Rstudio and the package `odin` for R.
 
 Full details on the `odin` package can be found in [its documentation](https://mrc-ide.github.io/odin) and in particular its [introductory guide](https://mrc-ide.github.io/odin/articles/odin.html).
 
 
-## A comparative example of `odin` interface and `odin` in R
+## A comparative example of the `odin` interface and `odin` in R
 
-We will use a simple SIR closed model as example for of how results obtained using the short-course interface can be reproduced in R and Rstudio.
+We will use a simple SIR closed model as an example of how results obtained using the short course interface can be reproduced in R and Rstudio.
 
-### SIR closed model using the short-course interface
+### SIR closed model using the short course interface
 
 
 The screen shot below shows the lines of code required to programme, compile and run an SIR model using the short course interface.
@@ -67,7 +67,7 @@ knitr::include_graphics("img/sir_run.png")
 ```
 
 
-Another feature of the interface is the "Sensitivity" panel. Here, you can explore the sensitivity of model outputs to variations in parameter values. This can be presented in different graphical options. Here, a plot showing the traces of "Number Infected" over time from 100 simulations exploring a +/- 20% variation in the value of *beta*.
+Another feature of the interface is the "Sensitivity" panel. Here, you can explore the sensitivity of model outputs to variations in parameter values. This can be presented in different graphical options. Below is a plot showing the traces of "Number Infected" over time from 100 simulations exploring a +/- 20% variation in the value of *beta*.
 
 
 ```{r echo=FALSE,fig.align="center", out.width="90%"}
@@ -82,13 +82,13 @@ Here we will replicate the results above using R. As a starting point, Rstudio m
 
 As mentioned previously, R provides a complete set of built-in functions and a graphical interface. But most of the tools required to run and explore our epidemic models require the installation of external packages. R packages only need to be installed once on your machine, but need to be loaded every time you need to use their utilities in a new session. For the current example, we require the packages `odin`, `ggplot2`, and `reshape2`.
 
-You may need to install packages, and you can do this by running
+You may need to install packages, and you can do this by running:
 
 ```{r eval=FALSE}
 install.packages(c("odin", "ggplot2", "reshape2"))
 ```
 
-Once packages have been installed, they can be loaded to be made available to your current R session
+Once packages have been installed, they can be loaded to be made available to your current R session:
 
 ```{r echo=TRUE}
 library("odin")
@@ -156,7 +156,7 @@ ggplot(ymelt) +
   aes(x = t, y = value, color = variable) +
   geom_line() +
   scale_color_manual(values = cols) +
-  theme_bw()
+  theme_classic()
 ```
 
 Now, let's explore the sensitivity of the model to variations in the *beta* parameter by looking at its effect on the number of infected individuals
@@ -176,7 +176,7 @@ f <- function(beta) {
 }
 ```
 
-(note that for this case, the values are `t` and `sir` here are found in the "Global environment" - i.e., the values that you have already saved in your R session. For more information on this programming style see [the functional programming chapter in Advanced R](http://adv-r.had.co.nz/Functional-programming.html))
+(note that for this case, the values `t` and `sir` here are found in the "Global environment" - i.e., the values that you have already saved in your R session. For more information on this programming style see [the functional programming chapter in Advanced R](http://adv-r.had.co.nz/Functional-programming.html))
 
 ```{r}
 output <- sapply(beta, f)
@@ -198,7 +198,7 @@ yymelt <- melt(yy, id.vars = "t")
 # Plot our output
 ggplot(data = yymelt) +
   aes(x = t , y = value, color = variable) +
-  theme_bw() +
+  theme_classic() +
   theme(legend.position = "none") +
   scale_color_manual(values = rep(cols[2], sims)) +
   geom_line()
@@ -206,4 +206,4 @@ ggplot(data = yymelt) +
 
 We have managed to replicate our results using R.
 
-As you could see, the short-course interface was dealing with many details in the background that were hidden from view. Even if the transition to R brings added complexity, it also brings many possibilities.  Hopefully this document was a useful starting point.
+As you could see, the short course interface was dealing with many details in the background that were hidden from view. Even if the transition to R brings added complexity, it also brings many possibilities.  Hopefully this document was a useful starting point.
