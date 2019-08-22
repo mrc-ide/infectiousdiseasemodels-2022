@@ -80,20 +80,18 @@ knitr::include_graphics("img/batchrun.png")
 
 Here we will replicate the results above using R. As a starting point, Rstudio must be opened and a blank script ready to type our code. Code snippets below should be copied and pasted into your own R script.
 
-As mentioned previously, R provides a complete set of built-in functions and a graphical interface. But most of the tools required to run and explore our epidemic models require the installation of external packages. R packages only need to be installed once on your machine, but need to be loaded every time you need to use their utilities in a new session. For the current example, we require the packages `odin`, `ggplot2`, and `reshape2`.
+As mentioned previously, R provides a complete set of built-in functions and a graphical interface. But most of the tools required to run and explore our epidemic models require the installation of external packages. R packages only need to be installed once on your machine, but need to be loaded every time you need to use their utilities in a new session. For the current example, we require the package `odin`.
 
 You may need to install packages, and you can do this by running:
 
 ```{r eval=FALSE}
-install.packages(c("odin", "ggplot2", "reshape2"))
+install.packages("odin")
 ```
 
 Once packages have been installed, they can be loaded to be made available to your current R session:
 
 ```{r echo=TRUE}
 library("odin")
-library("ggplot2")
-library("reshape2")
 ```
 
 Now, lets write our model equations using `odin` syntax. Note the initial line is a command to create an `odin` object called "sir". Similarly, the contents of this object are enclosed in brackets.
@@ -135,7 +133,7 @@ head(y)
 
 The output above shows the top 6 rows of our model state variables.
 
-Since we have a set of results, we can plot them to see the model trajectories over time. We will start by plotting using R base graphics and then we will see the same using `ggplot2.`
+Since we have a set of results, we can plot them to see the model trajectories over time. We will plot using base R graphics to demonstrate.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Plot model states overtime with base R
@@ -144,20 +142,6 @@ matplot(y[, 1], y[, -1], type = "l", lty = 1, col = cols,
         xlab = "time", ylab = "S, I, R")
 ```
 
-And now with ggplot2...
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Melt data frame to be compatible with ggplot
-ymelt <- melt(y, id.vars = "t")
-
-# Plot the model states over time with ggplot
-
-ggplot(ymelt) +
-  aes(x = t, y = value, color = variable) +
-  geom_line() +
-  scale_color_manual(values = cols) +
-  theme_classic()
-```
 
 Now, let's explore the sensitivity of the model to variations in the *beta* parameter by looking at its effect on the number of infected individuals
 
@@ -188,21 +172,7 @@ This output can be plotted with base R
 matplot(output, type = "l", col = cols[2], lty = 1, xlab = "Time", ylab = "I")
 ```
 
-or with ggplot2:
-
-```{r}
-yy <- as.data.frame(output)
-yy[["t"]] <- t
-yymelt <- melt(yy, id.vars = "t")
-
-# Plot our output
-ggplot(data = yymelt) +
-  aes(x = t , y = value, color = variable) +
-  theme_classic() +
-  theme(legend.position = "none") +
-  scale_color_manual(values = rep(cols[2], sims)) +
-  geom_line()
-```
+In this document, we have demomstrated plotting the outputs in base R. However plotting can also be done in any framework of your choice. For example, `ggplot2` is popular for it's flexibility.
 
 We have managed to replicate our results using R.
 
