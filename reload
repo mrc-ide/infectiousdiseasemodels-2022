@@ -1,0 +1,98 @@
+#!/usr/bin/env Rscript
+
+find_root <- function(args = commandArgs()) {
+  re <- "^--file=(.+)$"
+  i <- grep(re, args)
+  stopifnot(length(i) >= 1)
+  path_script <- normalizePath(sub(re, "\\1", args[[i[[1]]]]), mustWork = TRUE)
+  dirname(path_script)
+}
+
+
+reload <- function(root) {
+  paths <- dirname(list.files(root, recursive = TRUE, pattern = "^app.R$"))
+  ok <- file.create(file.path(root, paths, "restart.txt"))
+  if (any(ok)) {
+    message(sprintf("Reloaded %d apps:\n%s",
+                    sum(ok), paste("  -", paths[ok], collapse = "\n")))
+  }
+  if (any(!ok)) {
+    message(sprintf("Failed to reload %d apps:\n%s",
+                    sum(!ok), paste("  -", paths[!ok], collapse = "\n")))
+  }
+}
+
+
+clear <- function(root) {
+  paths <- list.files(root, recursive = TRUE, pattern = "^restart.txt$",
+                      full.names = TRUE)
+  unlink(paths)
+  message(sprintf("Removed %d reload files", length(paths)))
+}
+
+
+parse_args <- function(args) {
+  if (length(args) == 0) {
+    clear <- FALSE
+  } else if (identical(args, "--clear")) {
+    clear <- TRUE
+  } else {
+    stop("Usage:\n  reload [--clear]")
+  }
+  list(clear = clear)
+}
+
+
+die <- function(msg) {
+  message(msg)
+  q(save = "no", status = 1)
+}
+
+
+prepare <- function(root, file) {
+  if (file.exists(file.path(root, file))) {
+    paths <- dirname(list.files(root, recursive = TRUE, pattern = "^app.R$"))
+    n <- lengths(strsplit(paths, "/"))
+    for (p in paths) {
+      n <- length(strsplit(p, "/")[[1]])
+      from <- file.path(paste(rep("..", n), collapse = "/"), file)
+      to <- file.path(root, p, file)
+      if (!file.exists(to)) {
+        message(sprintf("Creating %s for %s", file, p))
+        file.symlink(from, to)
+      }
+    }
+  }
+}
+
+
+staff_pages <- function(root) {
+  files <- c("week1.html", "week2.html")
+  message("Writing staff pages")
+  for (f in files) {
+    txt <- readLines(file.path(root, f))
+    writeLines(txt[!grepl("static/after.js", txt, fixed = TRUE)],
+               file.path(root, sub(".html$", "-staff.html", f)))
+  }
+}
+
+
+main <- function(args = commandArgs(TRUE), root = find_root()) {
+  opts <- tryCatch(
+    parse_args(args),
+    error = function(e) die(e$message))
+  message("Working in ", root)
+  if (opts$clear) {
+    clear(root)
+  } else {
+    reload(root)
+    prepare(root, ".lib")
+    prepare(root, ".Renviron")
+    staff_pages(root)
+  }
+}
+
+
+if (!interactive()) {
+  main()
+}

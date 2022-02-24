@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+if [ -d www ]; then
+    echo "www already setup"
+else
+    GIT_URL=$(git config --get remote.origin.url)
+    git clone --branch=gh-pages $GIT_URL www
+fi
