@@ -1,0 +1,3 @@
+ODIN_UI_ROOT=odin.ui:infectiousdiseasemodels2022
+REDIS_URL=redis://redis:6379
+TZ=Europe/London
