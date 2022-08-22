@@ -49,13 +49,14 @@ die <- function(msg) {
 }
 
 
-prepare <- function(root, file) {
+prepare <- function(root, file, src = NULL) {
   if (file.exists(file.path(root, file))) {
     paths <- dirname(list.files(root, recursive = TRUE, pattern = "^app.R$"))
     n <- lengths(strsplit(paths, "/"))
     for (p in paths) {
       n <- length(strsplit(p, "/")[[1]])
-      from <- file.path(paste(rep("..", n), collapse = "/"), file)
+      from <- file.path(paste(rep("..", n), collapse = "/"),
+                        if (is.null(src)) file else src)
       to <- file.path(root, p, file)
       if (!file.exists(to)) {
         message(sprintf("Creating %s for %s", file, p))
@@ -86,7 +87,7 @@ main <- function(args = commandArgs(TRUE), root = find_root()) {
     clear(root)
   } else {
     reload(root)
-    prepare(root, ".lib")
+    prepare(root, ".lib", ".lib-2019")
     prepare(root, ".Renviron")
     staff_pages(root)
   }
