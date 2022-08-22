@@ -58,10 +58,9 @@ prepare <- function(root, file, src = NULL) {
       from <- file.path(paste(rep("..", n), collapse = "/"),
                         if (is.null(src)) file else src)
       to <- file.path(root, p, file)
-      if (!file.exists(to)) {
-        message(sprintf("Creating %s for %s", file, p))
-        file.symlink(from, to)
-      }
+      message(sprintf("Creating %s for %s: %s => %s", file, p, from, to))
+      unlink(to)
+      file.symlink(from, to)
     }
   }
 }
