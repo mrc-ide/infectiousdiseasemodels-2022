@@ -2,7 +2,7 @@
 title: 'R documentation: transitioning from the odin interface to R'
 author: 'Prepared for the course: Introduction to Mathematical Models of the Epidemiology
   & Control of Infectious Diseases'
-date: "September 2019"
+date: "September 2022"
 output:
   html_document:
     df_print: paged
