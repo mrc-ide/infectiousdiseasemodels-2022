@@ -26,8 +26,8 @@ g <- user(0.4)		#proportion at-risk (in S class)
 c <-user(11)		#partner change rate
 kappa <- user(0.1)  	#per partner HIV transmission probability
 nu <- user(0.0833)            #mortality rate per person per year due to HIV/AIDS (1/mean duration in years)		
-mu <- user(0.0152)      #crude mortality rate due to causes other than AIDS, scaled to rate per person
-alpha <-user(0.0374)    #birth rate scaled to per person
+mu <- user(0.008)      #crude mortality rate due to causes other than AIDS, scaled to rate per person
+alpha <-user(0.0332)    #birth rate scaled to per person
 
 ##Additional output
 

@@ -16,7 +16,7 @@ output(pop) <- N
 # parameter values
 N0 <- user(1e7)           # total population size
 I0 <- user(1)             # num infectious cases at start of epidemic
-sigma <- user(1)          # recovery rate (1/mean duration infectiousness)
+sigma <- user(1)         # recovery rate (1/mean duration infectiousness)
 gamma <- user(1)
 alpha <- user(0)
 delta <- user(0)          # waning antibody rate

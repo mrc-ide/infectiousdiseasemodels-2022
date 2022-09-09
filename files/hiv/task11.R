@@ -34,26 +34,24 @@ beta_ftom <- kappa_ftom*c_m
 B <- alpha*N_tot 	#entry rate, exponentially growing population
 #B <- mu*N+nu*I	#entry rate, constant population size - useful for model checking
 
+c_f <- c_m*(S_m+I_m)/(S_f+I_f) #calculating partner change rate for females at each time-step, ensuring partnerships balance
+
 ##Parameter values
 
 g <- user(0.4)		#proportion at-risk (in S class)
-c_f <-user(11)		#partner change rate, females
+#c_f <-user(11)		#partner change rate, females
 c_m <-user(11)		#partner change rate, males
 kappa_mtof <- user(0.1)  	#per partner HIV transmission probability, male to female
 kappa_ftom <- user(0.1)  	#per partner HIV transmission probability, female to male
 nu <- user(0.0833)            #mortality rate per person per year due to HIV/AIDS (1/mean duration in years)		
-mu <- user(0.0152)      #crude mortality rate due to causes other than AIDS, scaled to rate per person
-alpha <-user(0.0374)    #birth rate scaled to per person
+mu <- user(0.008)      #crude mortality rate due to causes other than AIDS, scaled to rate per person
+alpha <-user(0.0332)    #birth rate scaled to per person
 
 ##Additional output
 
 output(prevalence_f) <- I_f/N_f
-
 output(prevalence_m) <- I_m/N_m
-
 output(prevalence_tot) <- (I_f+I_m)/N_tot
-
-
 output(incidence_f) <- beta_mtof*S_f*I_m/N_m
 output(incidence_m) <- beta_ftom*S_m*I_f/N_f
 output(incidence_tot) <- (beta_mtof*S_f*I_m/N_m)+(beta_ftom*S_m*I_f/N_f)

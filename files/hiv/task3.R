@@ -1,7 +1,7 @@
 ##Differential equations
 
-deriv(S) <- B -beta*S*I/N - mu*S
-deriv(I) <- beta*S*I/N -mu*I -nu*I
+deriv(S) <- B-beta*S*I/N-mu*S
+deriv(I) <- beta*S*I/N-mu*I-nu*I
 
 ##Initial conditions
 
@@ -25,13 +25,12 @@ R0 <- beta/(mu+nu)
 c <-user(2.4)		    #partner change rate
 kappa <- user(0.1)  	#per partner HIV transmission probability
 nu <- user(0.0833)      #mortality rate per person per year due to HIV/AIDS (1/mean duration in years)		
-mu <- user(0.0152)      #crude mortality rate due to causes other than AIDS, scaled to rate per person
-alpha <-user(0.0374)    #birth rate scaled to per person
+mu <- user(0.008)      #crude mortality rate due to causes other than AIDS, scaled to rate per person
+alpha <-user(0.0332)    #birth rate scaled to per person
 
 ##Additional output
 
 output(prevalence) <- I/N
-output(Preveq) <- 1 - 1/R0 #prevalence at equilibrium
-output(R0_out) <- beta/(mu+nu)
-output(inci) <- (beta*S*I/N)/N
-
+output(Preveq) <- 1-1/R0 #prevalence at equilibrium
+output(R0_out) <-beta/(mu+nu)
+output(incidence) <- (beta*S*I/N)/S

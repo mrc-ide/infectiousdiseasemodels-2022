@@ -14,7 +14,7 @@ output(pop) <- S + I + R
 N <- 1e6               # total population size
 I0 <- user(1)          # num infectious cases at start of epidemic
 # beta <- R0*(sigma+b) # transmission parameter
-beta <- user(5)
+beta <- user(4)
 sigma <- user(2)       # recovery rate (1/mean duration infectiousness)
 # R0 <- user(5)        # av num new cases caused by single infectious case
 b <- 1/52              # death rate (mean life expectancy of 1 year or 52 weeks)
