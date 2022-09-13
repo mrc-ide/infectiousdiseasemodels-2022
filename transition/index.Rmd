@@ -33,7 +33,7 @@ For the rest of this documentation, it is useful to finalise installation and se
 - *[Coursera's Data Scientist's Toolbox](https://www.coursera.org/learn/data-scientists-tools)*: Coursera centralise free online courses created by leading universities. The "Data Scientist's Toolbox" covers statistics in R from installation to actual data analysis.
 
 
-- *[Introduction to R for IDM](https://mrc-ide.github.io/R-for-IDM-Intro/)*: This documentation is part of Imperial College London's online materials, specifcally for infectious disease modelling.
+- *[Introduction to R for IDM](https://mrc-ide.github.io/R-for-IDM-Intro/)*: This documentation is part of Imperial College London's online materials, specifically for infectious disease modelling.
 
 
 ### Odin documentation
@@ -172,7 +172,7 @@ This output can be plotted with base R
 matplot(output, type = "l", col = cols[2], lty = 1, xlab = "Time", ylab = "I")
 ```
 
-In this document, we have demomstrated plotting the outputs in base R. However plotting can also be done in any framework of your choice. For example, `ggplot2` is popular for it's flexibility.
+In this document, we have demonstrated plotting the outputs in base R. However plotting can also be done in any framework of your choice. For example, `ggplot2` is popular for it's flexibility.
 
 We have managed to replicate our results using R.
 
