@@ -13,7 +13,7 @@ $$\frac{dI}{dt}=\beta \frac{SI}{N}-\nu I$$
 
 The analytical solution to this ODE can be shown to be:
 
-$$I(t)=I \frac{1}{1+(I⁄I_0 -1)\exp(-(\beta -\nu )t)}$$
+$$I(t)=I^* \frac{1}{1+(I^*/I_0 -1)\exp(-(\beta -\nu )t)}$$
 
 where $I_0$ is the initial number of infected individuals and $I^*=N(1-\nu / \beta )$. After sufficient time, the infection and recovery processes balance each other out. This occurs when the number of infectious individuals reaches its equilibrium value $I^*$. We can write the equilibrium value as
 
